@@ -64,7 +64,7 @@ function buildCharts(sample) {
       orientation: 'h',
       marker: {
         color: '#17BECF',
-        width: 1
+        width: 10
       },
       type: 'bar'
     };
@@ -75,10 +75,11 @@ function buildCharts(sample) {
       title: 'Top 10 OTUs'
     }
 
-    Plotly.newPlot("chart", data, layout);
+    Plotly.newPlot("barchart", data, layout);
+  });
 };
 
-buildCharts();
+buildCharts()
 
 // 3. Create a bubble chart that displays each sample.
 
@@ -91,6 +92,40 @@ buildCharts();
 // Use otu_ids for the marker colors.
 
 // Use otu_labels for the text values.
+
+function buildCharts(sample) {
+  d3.json('samples.json').then(function(data){
+
+    // Grab values from the data json object to build the plots
+    var data = data.samples;
+
+    var filteredData = data.filter(sampleObject => sampleObject.id === sample);
+    
+    var Value = filteredData[0].sample_values.slice(0,10);
+    var OTU = filteredData[0].otu_ids.slice(0,10);
+    var Label = filteredData[0].otu_labels.slice(0,10);
+    
+    var trace1 = {
+      x: OTU,
+      y: Value,
+      marker: {
+        color: 'rgb(31, 119, 180)',
+        size: 18
+      },
+      type: 'scatter'
+    };
+
+    var data = [trace1];
+
+    var layout = {
+      title: 'Samples'
+    }
+
+    Plotly.newPlot("bubblechart", data, layout);
+  });
+};
+
+buildCharts()
 
 
 // 4. Display the sample metadata, 
